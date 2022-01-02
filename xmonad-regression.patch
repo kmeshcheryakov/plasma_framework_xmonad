@@ -1,0 +1,26 @@
+--- a/src/plasmaquick/dialog.cpp.orig     2019-04-07 10:34:27.000000000 +0300
++++ b/src/plasmaquick/dialog.cpp  2019-04-22 11:32:58.537281765 +0300
+@@ -800,14 +800,6 @@
+         d->slotWindowPositionChanged();
+     });
+ 
+-    // Given dialogs are skip task bar and don't have a decoration
+-    // minimizing them using e.g. "minimize all" should just close them
+-    connect(this, &QWindow::windowStateChanged, this, [this](Qt::WindowState newState) {
+-        if (newState == Qt::WindowMinimized) {
+-            setVisible(false);
+-        }
+-    });
+-
+     connect(this, &QWindow::visibleChanged, this, &Dialog::visibleChangedProxy);
+     connect(this, SIGNAL(visibleChanged(bool)), this, SLOT(updateInputShape()));
+     connect(this, SIGNAL(outputOnlyChanged()), this, SLOT(updateInputShape()));
+@@ -1357,7 +1349,6 @@
+         }
+
+         // Bug 381242: Qt remembers minimize state and re-applies it when showing
+-        setWindowStates(windowStates() & ~Qt::WindowMinimized);
+         QQuickWindow::setVisible(visible);
+         //signal will be emitted and proxied from the QQuickWindow code
+     } else {
+
